@@ -1,13 +1,12 @@
 package com.tsswebapps.mylibrary.models;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private UUID id;
 
     @Column(length = 100, nullable = false)
@@ -23,16 +22,20 @@ public class Book {
 
     private String image;
 
-    public Book(UUID id, String name, String author, String yearOfPublication, int pages, String image) {
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Library> libraries = new LinkedHashSet<>();
+
+    public Book(){}
+
+    public Book(UUID id, String name, String author, String yearOfPublication, int pages, String image, Set<Library> libraries) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.yearOfPublication = yearOfPublication;
         this.pages = pages;
         this.image = image;
+        this.libraries = libraries;
     }
-
-    public Book(){}
 
     public UUID getId() {
         return id;
@@ -56,6 +59,14 @@ public class Book {
 
     public String getImage() {
         return image;
+    }
+
+    public Set<Library> getLibraries() {
+        return Collections.unmodifiableSet(libraries);
+    }
+
+    public void setLibrary(Library library){
+        this.libraries.add(library);
     }
 
     @Override

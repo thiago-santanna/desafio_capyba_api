@@ -4,15 +4,16 @@ import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 @Entity
+@Table(name = "tb_user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(length = 100, nullable = false)
     private String name;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -21,30 +22,17 @@ public class User {
     private String profileImage;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Token token;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "library_ID")
+    @JoinColumn(name = "library_id")
     private Library library;
 
-    public User(UUID id, String name, String email, String password,
-                String profileImage, Token token, Library library) {
+    public User(){}
+
+    public User(UUID id, String name, String email, String password, String profileImage, Library library) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.profileImage = profileImage;
-        this.token = token;
-        this.library = library;
-    }
-
-    public User(){}
-
-    public Library getLibrary() {
-        return library;
-    }
-
-    public void setLibrary(Library library) {
         this.library = library;
     }
 
@@ -68,8 +56,8 @@ public class User {
         return profileImage;
     }
 
-    public Token getToken() {
-        return token;
+    public Library getLibrary() {
+        return library;
     }
 
     @Override

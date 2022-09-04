@@ -7,18 +7,23 @@ import java.util.UUID;
 @Entity
 public class Token {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private UUID id;
 
     @Column(nullable = false)
     private String token;
 
-    public Token(UUID id, String token) {
-        this.id = id;
-        this.token = token;
-    }
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Token(){}
+
+    public Token(UUID id, String token, User user) {
+        this.id = id;
+        this.token = token;
+        this.user = user;
+    }
 
     public UUID getId() {
         return id;
@@ -26,6 +31,10 @@ public class Token {
 
     public String getToken() {
         return token;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
